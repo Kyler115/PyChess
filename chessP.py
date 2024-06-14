@@ -1,6 +1,8 @@
 import sys
+import numpy as np
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QGridLayout, QWidget
 from PyQt5.QtCore import QSize, Qt, QDir
+
 
 from PyQt5.QtGui import QPalette, QColor, QIcon
 ###############################################################################
@@ -14,16 +16,33 @@ class Color(QWidget):
         palette.setColor(QPalette.Window, QColor(color))
         self.setPalette(palette)
 ###############################################################################
-class MainWindow(QMainWindow):        
-    def bClick(self, z):
-            print(z)
-            
+class Button(QPushButton):
+    def __init__(self,buttonId):
+        super().__init__()      
+        self.buttonId = buttonId    
+    
+    def getBID(self):
+        return self.buttonId
+###############################################################################
+class MainWindow(QMainWindow):       
+    
     def __init__(self):
         super(MainWindow,self).__init__()
         self.setWindowTitle("bruh")
         layout = QGridLayout()
         self.buttons = []
         x,self.y,self.z = 0,0,0
+        matrix = np.array([[1,2,3,4,5,3,2,1],[6,6,6,6,6,6,6,6],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[6,6,6,6,6,6,6,6],[1,2,3,4,5,3,2,1]])
+        print(matrix)
+        ##KEY##
+        ## 1 = ROOKS
+        ## 2 = KNIGHTS 
+        ## 3 = BISHOPS
+        ## 4 = QUEENS
+        ## 5 = KINGS
+        ## 6 = PAWNS
+        ## 0 = EMPTY SPACE
+        
         
         rookD = "rook.png"
         absPRD = QDir().absoluteFilePath(rookD)
@@ -52,71 +71,77 @@ class MainWindow(QMainWindow):
         
         for x in range(8):
             for y in range(8):
-                button = QPushButton()
-                button.setMinimumSize(100,100)
-                button.setMaximumSize(100,100)
-                button.clicked.connect(self.bClick)
-                button.setCheckable(True)
+                buttonT = Button(self.z)
+                buttonT.setMinimumSize(100,100)
+                buttonT.setMaximumSize(100,100)
+                buttonT.clicked.connect(self.bClick)
 
                 if (x + y) % 2 == 0:
-                    button.setStyleSheet("background-color: white;")
-                    layout.addWidget(button, x, y)
-                    self.buttons.append(button)
+                    buttonT.setStyleSheet("background-color: white;")
+                    layout.addWidget(buttonT, x, y)
+                    self.buttons.append(buttonT)
                     self.z = self.z+1
                 else:
-                    button.setStyleSheet("background-color: grey;")
-                    layout.addWidget(button, x, y)
-                    self.buttons.append(button)
+                    buttonT.setStyleSheet("background-color: grey;")
+                    layout.addWidget(buttonT, x, y)
+                    self.buttons.append(buttonT)
                     self.z = self.z+1
+                    
                 if(self.z == 1):
-                    button.setIcon(QIcon(absPRD))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPRD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 3):
-                    button.setIcon(QIcon(absPBD))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPBD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 2):
-                    button.setIcon(QIcon(absPKD))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPKD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 4):
-                    button.setIcon(QIcon(absPQD))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPQD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 5):
-                    button.setIcon(QIcon(absPKKD))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPKKD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 6):
-                    button.setIcon(QIcon(absPBD))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPBD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 7):
-                    button.setIcon(QIcon(absPKD))
-                    button.setIconSize(QSize(100,100))    
+                    buttonT.setIcon(QIcon(absPKD))
+                    buttonT.setIconSize(QSize(100,100))  
                 elif(self.z == 8):
-                    button.setIcon(QIcon(absPRD))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPRD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z in range(17)):
-                    button.setIcon(QIcon(absPPD))
-                    button.setIconSize(QSize(100,100))                    
+                    buttonT.setIcon(QIcon(absPPD))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z >= 49 and self.z in range(57)):
-                    button.setIcon(QIcon(absPPW))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPPW))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 57 or self.z == 64):
-                    button.setIcon(QIcon(absPRW))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPRW))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 58 or self.z == 63):
-                    button.setIcon(QIcon(absPKW))
-                    button.setIconSize(QSize(100,100))
+                    buttonT.setIcon(QIcon(absPKW))
+                    buttonT.setIconSize(QSize(100,100))
                 elif(self.z == 59 or self.z == 62):
-                    button.setIcon(QIcon(absPBW))
-                    button.setIconSize(QSize(100,100))      
+                    buttonT.setIcon(QIcon(absPBW))
+                    buttonT.setIconSize(QSize(100,100))      
                 elif(self.z == 60):
-                    button.setIcon(QIcon(absPQW))
-                    button.setIconSize(QSize(100,100)) 
+                    buttonT.setIcon(QIcon(absPQW))
+                    buttonT.setIconSize(QSize(100,100)) 
                 elif(self.z == 61):
-                    button.setIcon(QIcon(absPKKW))
-                    button.setIconSize(QSize(100,100)) 
+                    buttonT.setIcon(QIcon(absPKKW))
+                    buttonT.setIconSize(QSize(100,100)) 
+
     
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+        
+    def bClick(self):
+        button = self.sender()
+        buttonId = button.getBID()
+        print(f"Button {buttonId} clicked.")
         
 ###############################################################################
 app = QApplication(sys.argv)
