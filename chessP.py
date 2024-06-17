@@ -38,8 +38,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Chesssssssssssssssse")
         layout = QGridLayout()
         self.buttons = []
-        self.flag6 = False
+        self.flag = False
         self.stack = []
+        self.prevButt = ""
         x,self.y,self.z = 0,0,0
         ## matrix = np.array([[1,2,3,4,5,3,2,1],[6,6,6,6,6,6,6,6],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[6,6,6,6,6,6,6,6],[1,2,3,4,5,3,2,1]])
         ##print(matrix)
@@ -183,18 +184,20 @@ class MainWindow(QMainWindow):
         button = self.sender()
         buttonId = button.getBID()
         buttonType = button.getType()
-        if(self.flag6 == True):
+        if(self.flag == True):
             if(buttonId == self.stack[-1].getBID()+8 or 
                buttonId == self.stack[-1].getBID()+9 or 
                buttonId == self.stack[-1].getBID()+7):
                 button.setIcon(QIcon(self.absPPD))  
                 self.stack.pop().setIcon(QIcon())
-                self.flag6 = False
+                self.flag = False
+                button.setType(self.prevButt.getType())
         if(buttonType == "pawn" ):
-            self.flag6 = True
+            self.flag = True
             self.stack.append(button)
+            self.prevButt = button
         elif(buttonType == ""):
-            self.stack.append(button)
+            print("bruh")
 
         
 ###############################################################################
