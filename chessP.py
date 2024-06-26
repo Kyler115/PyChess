@@ -19,6 +19,7 @@ class Button(QPushButton):
         super().__init__()      
         self.buttonId = buttonId 
         self.typeB = ""
+        self.pawnSpecial = 0
     
     def getBID(self):
         return self.buttonId
@@ -31,6 +32,13 @@ class Button(QPushButton):
         
     def getType(self):
         return self.typeB
+    
+    def setPawnSpecial(self, num):
+        self.pawnSpecial = num
+        
+    def getPawnSpecial(self):
+        return self.pawnSpecial
+        
 ###############################################################################
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -38,10 +46,17 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Chesssssssssssssssse")
         layout = QGridLayout()
         self.buttons = []
-        self.flag = False
+        self.flagPB = False
+        self.flagPW = False
+        self.flagR = False
+        self.flagB = False
+        self.flagK = False
+        self.flagQ = False
+        self.flagKK = False
         self.stack = []
         self.prevButt = ""
         x,self.y,self.z = 0,0,0
+    
         ## matrix = np.array([[1,2,3,4,5,3,2,1],[6,6,6,6,6,6,6,6],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[6,6,6,6,6,6,6,6],[1,2,3,4,5,3,2,1]])
         ##print(matrix)
         ##KEY##
@@ -141,7 +156,7 @@ class MainWindow(QMainWindow):
                     buttonT.setIcon(QIcon(self.absPPD))
                     buttonT.setIconSize(QSize(100,100))
                     buttonT.setBID(self.z)
-                    buttonT.setType("pawn")
+                    buttonT.setType("pawnB")
                 elif(self.z < 49):
                     buttonT.setIconSize(QSize(100,100))
                     buttonT.setBID(self.z)
@@ -149,7 +164,7 @@ class MainWindow(QMainWindow):
                     buttonT.setIcon(QIcon(self.absPPW))
                     buttonT.setIconSize(QSize(100,100))
                     buttonT.setBID(self.z)
-                    buttonT.setType("pawn")
+                    buttonT.setType("pawnW")
                 elif(self.z == 57 or self.z == 64):
                     buttonT.setIcon(QIcon(self.absPRW))
                     buttonT.setIconSize(QSize(100,100))
@@ -184,20 +199,54 @@ class MainWindow(QMainWindow):
         button = self.sender()
         buttonId = button.getBID()
         buttonType = button.getType()
-        if(self.flag == True):
+        print(buttonType)
+        
+        ##B PAWN##
+        if(self.flagPB == True):
             if(buttonId == self.stack[-1].getBID()+8 or 
                buttonId == self.stack[-1].getBID()+9 or 
                buttonId == self.stack[-1].getBID()+7):
                 button.setIcon(QIcon(self.absPPD))  
                 self.stack.pop().setIcon(QIcon())
-                self.flag = False
+                self.flagPB = False
                 button.setType(self.prevButt.getType())
-        if(buttonType == "pawn" ):
-            self.flag = True
+ 
+        ##W PAWN##                ##NEED TO FIX EDGE CASES##
+        elif(self.flagPW == True):
+            if(button.getPawnSpecial() == 0):
+                if(buttonId == self.stack[-1].getBID()-8 or buttonId == self.stack[-1].getBID()-9 or buttonId == self.stack[-1].getBID()-7) or buttonId == self.stack[-1].getBID()-16:
+                    button.setPawnSpecial(1)
+                    button.setIcon(QIcon(self.absPPW))  
+                    self.stack.pop().setIcon(QIcon())
+                    self.flagPW = False
+                    button.setType(self.prevButt.getType())
+                
+            elif(buttonId == self.stack[-1].getBID()-8 or buttonId == self.stack[-1].getBID()-9 or buttonId == self.stack[-1].getBID()-7):
+                button.setIcon(QIcon(self.absPPW))  
+                self.stack.pop().setIcon(QIcon())
+                self.flagPW = False
+                button.setType(self.prevButt.getType())
+            
+        elif(self.flagR == True):
+            if(buttonId == self.stack[-1]in range(64)):
+                print("hero")
+              
+        if(buttonType == "pawnB" ):
+            self.flagPB = True
             self.stack.append(button)
             self.prevButt = button
-        elif(buttonType == ""):
-            print("bruh")
+            button.setType("")
+        elif(buttonType == "pawnW" ):
+            self.flagPW = True
+            self.stack.append(button)
+            self.prevButt = button
+            button.setType("")
+        elif(buttonType == "rook"):
+            self.flagR = True
+            self.stack.append(button)
+            self.prevButt = button
+        
+
 
         
 ###############################################################################
